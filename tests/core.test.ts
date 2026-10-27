@@ -118,11 +118,15 @@ describe("research pipeline", () => {
     expect(rows.every((r) => r.volume === undefined)).toBe(true);
   });
 
-  it("reports planned providers as not configured", () => {
+  it("reports keyed providers as configured only when every key is set", () => {
     const status = providerStatus({});
     expect(status.find((p) => p.id === "google-autocomplete")?.configured).toBe(true);
     const ads = status.find((p) => p.id === "google-ads")!;
     expect(ads.configured).toBe(false);
-    expect(ads.planned).toBe(true);
+    expect(ads.planned).toBe(false);
+    expect(ads.missingEnv).toContain("GOOGLE_ADS_DEVELOPER_TOKEN");
+
+    const keys = Object.fromEntries(ads.missingEnv.map((k) => [k, "x"]));
+    expect(providerStatus(keys).find((p) => p.id === "google-ads")?.configured).toBe(true);
   });
 });
