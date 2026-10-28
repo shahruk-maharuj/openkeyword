@@ -3,8 +3,9 @@ import { classifyIntent, clusterFor } from "./analyze";
 import { normalize, wordCount } from "./text";
 import { autocompleteProvider } from "./providers/autocomplete";
 import { googleAdsProvider } from "./providers/google-ads";
+import { googleTrendsProvider } from "./providers/google-trends";
 
-export const PROVIDERS: Provider[] = [autocompleteProvider, googleAdsProvider];
+export const PROVIDERS: Provider[] = [autocompleteProvider, googleAdsProvider, googleTrendsProvider];
 
 export function providerStatus(env: Record<string, string | undefined> = process.env): ProviderStatus[] {
   return PROVIDERS.map((p) => {

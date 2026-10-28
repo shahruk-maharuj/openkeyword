@@ -21,7 +21,7 @@ Semrush and Ahrefs cost $100+ a month, mostly for data you could pull yourself. 
 |---|---|---|---|
 | Google Autocomplete | Keyword ideas | Nothing | ✅ Working |
 | Google Keyword Planner | Search volume, CPC, competition | Google Ads API keys (free) | 🔜 Next |
-| Google Trends | Trend over time, rising terms | Nothing | 🔜 Planned |
+| Google Trends | 12-month trend, rising terms | Nothing | ✅ Working (unofficial, best effort) |
 | Google Search Console | Your real clicks, impressions, rankings | Google OAuth | 🔜 Planned |
 | DataForSEO | Competitor keywords, difficulty | Paid API (pay per use) | 🔜 Planned |
 | OpenAI / Claude | Smarter clustering and intent | Your API key | 🔜 Planned |
@@ -49,6 +49,10 @@ docker run -p 3000:3000 --env-file .env openkeyword
 ## Configuration
 
 Copy `.env.example` to `.env` and fill in only the sources you want. Anything left blank is skipped.
+
+### Google Trends
+
+Needs no keys. For each search, OpenKeyword asks Google Trends for the 12-month interest of the top 5 keywords and adds the seed's "rising" related queries as extra ideas. Trends has no official API, so requests run one at a time, answers are cached for 24 hours, and if Google rate-limits or changes the format you simply get no trend data.
 
 ## API
 

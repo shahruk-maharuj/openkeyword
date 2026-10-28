@@ -71,7 +71,7 @@ export default function Home() {
   }, [result]);
 
   function exportCsv() {
-    const csv = toCsv(rows as unknown as Record<string, unknown>[], ["keyword", "intent", "cluster", "words", "volume", "cpcLow", "cpcHigh", "competition", "sources"]);
+    const csv = toCsv(rows as unknown as Record<string, unknown>[], ["keyword", "intent", "cluster", "words", "volume", "cpcLow", "cpcHigh", "competition", "trend", "sources"]);
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
     const a = Object.assign(document.createElement("a"), { href: url, download: `openkeyword-${result?.seed.replace(/\s+/g, "-")}.csv` });
     a.click();

@@ -21,6 +21,8 @@ export interface KeywordMetrics {
   cpcHigh?: number;
   /** 0–100 competition index from Google Ads. */
   competition?: number;
+  /** Relative search interest over the last 12 months, 0–100, oldest first (Google Trends). */
+  trend?: number[];
 }
 
 export interface KeywordRow extends KeywordIdea, KeywordMetrics {
