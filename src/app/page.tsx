@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Intent, KeywordRow, ProviderStatus } from "@/lib/types";
 import { toCsv } from "@/lib/text";
+import { Sparkline } from "@/components/sparkline";
 
 const COUNTRIES: [string, string][] = [
   ["us", "United States"], ["gb", "United Kingdom"], ["ca", "Canada"], ["au", "Australia"],
@@ -64,6 +65,9 @@ export default function Home() {
     );
   }, [result, intent, cluster, filter]);
 
+  // Only show the Trend column once a trends provider has returned data.
+  const hasTrend = useMemo(() => (result?.rows ?? []).some((r) => (r.trend?.length ?? 0) > 1), [result]);
+
   const intentCounts = useMemo(() => {
     const c: Record<string, number> = {};
     for (const r of result?.rows ?? []) c[r.intent] = (c[r.intent] ?? 0) + 1;
@@ -71,7 +75,7 @@ export default function Home() {
   }, [result]);
 
   function exportCsv() {
-    const csv = toCsv(rows as unknown as Record<string, unknown>[], ["keyword", "intent", "cluster", "words", "volume", "cpcLow", "cpcHigh", "competition", "sources"]);
+    const csv = toCsv(rows as unknown as Record<string, unknown>[], ["keyword", "intent", "cluster", "words", "volume", "cpcLow", "cpcHigh", "competition", "trend", "sources"]);
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
     const a = Object.assign(document.createElement("a"), { href: url, download: `openkeyword-${result?.seed.replace(/\s+/g, "-")}.csv` });
     a.click();
@@ -155,7 +159,7 @@ export default function Home() {
             <div className="overflow-x-auto rounded-md border border-zinc-200">
               <table className="w-full text-sm">
                 <thead className="bg-zinc-50 text-left text-xs uppercase tracking-wide text-zinc-500">
-                  <tr><th className="px-3 py-2">Keyword</th><th className="px-3 py-2">Intent</th><th className="px-3 py-2 text-right">Words</th><th className="px-3 py-2 text-right">Volume</th><th className="px-3 py-2 text-right">CPC</th></tr>
+                  <tr><th className="px-3 py-2">Keyword</th><th className="px-3 py-2">Intent</th><th className="px-3 py-2 text-right">Words</th><th className="px-3 py-2 text-right">Volume</th><th className="px-3 py-2 text-right">CPC</th>{hasTrend && <th className="px-3 py-2">Trend <span className="normal-case tracking-normal opacity-60">12 mo</span></th>}</tr>
                 </thead>
                 <tbody>
                   {rows.map((r) => (
@@ -165,6 +169,7 @@ export default function Home() {
                       <td className="px-3 py-2 text-right tabular-nums text-zinc-500">{r.words}</td>
                       <td className="px-3 py-2 text-right tabular-nums">{r.volume?.toLocaleString() ?? <span className="text-zinc-300">—</span>}</td>
                       <td className="px-3 py-2 text-right tabular-nums">{r.cpcHigh !== undefined ? `$${r.cpcLow?.toFixed(2)}–${r.cpcHigh.toFixed(2)}` : <span className="text-zinc-300">—</span>}</td>
+                      {hasTrend && <td className="px-3 py-1"><Sparkline values={r.trend} /></td>}
                     </tr>
                   ))}
                 </tbody>

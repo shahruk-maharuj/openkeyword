@@ -6,7 +6,7 @@ Work top to bottom. Each item is sized for one focused session: one pull request
 
 - [ ] **Google Keyword Planner provider.** Use the Google Ads API REST `KeywordPlanIdeaService.GenerateKeywordHistoricalMetrics` with an OAuth refresh token to exchange for an access token. Batch keywords (max 10,000 per call), map `avgMonthlySearches`, `lowTopOfPageBidMicros`, `highTopOfPageBidMicros` and `competitionIndex` into `KeywordMetrics`. Use country → geo target constants and language → language constants. Remove `planned: true`. Test with a mocked fetch.
 - [ ] **Google Trends provider.** Interest over the last 12 months for the top 5 keywords, plus "rising" related queries as extra ideas. Unofficial endpoint, so cache it and fail soft.
-- [ ] **Trend sparkline** in the results table (inline SVG, no chart library).
+- [x] **Trend sparkline** in the results table (inline SVG, no chart library).
 - [ ] **Google Search Console provider.** OAuth or service account. Pull queries for a verified site with clicks, impressions, CTR and position. Add an "Opportunities" filter: impressions above 100 and position 8–20.
 - [ ] **DataForSEO provider.** Competitor mode: enter a domain and get its ranked keywords (`dataforseo_labs/google/ranked_keywords/live`), plus keyword difficulty.
 
